@@ -4,10 +4,12 @@ import {
   Body,
   HttpStatus,
   HttpException,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { Response } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -37,7 +39,7 @@ export class UserController {
       return {
         status: HttpStatus.OK,
         message: 'Login successful',
-        data: user,
+        data: user.data,
       };
     } catch (error) {
       throw new HttpException(
@@ -45,5 +47,14 @@ export class UserController {
         error.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  @Post('logout')
+  async logout(@Res() res: Response) {
+    res.clearCookie('token');
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      message: 'Logout successful',
+    });
   }
 }

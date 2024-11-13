@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UserService } from './user/user.service';
-import { User } from './user/user.entity';
 import { UserModule } from './user/user.module';
-import { UserController } from './user/user.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './user/jwt.strategy';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -22,14 +20,14 @@ import { JwtStrategy } from './user/jwt.strategy';
       autoLoadEntities: true,
       synchronize: true, //deploy set false
     }),
-    TypeOrmModule.forFeature([User]),
-    UserModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '5h' },
     }),
+    UserModule,
+    PostModule,
   ],
-  controllers: [UserController],
-  providers: [UserService, JwtStrategy],
+  controllers: [],
+  providers: [JwtStrategy],
 })
 export class AppModule {}

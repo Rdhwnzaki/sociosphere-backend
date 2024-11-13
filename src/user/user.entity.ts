@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { Post } from 'src/post/post.entity';
 
 @Entity()
 export class User {
@@ -34,4 +37,7 @@ export class User {
 
   @Column({ nullable: true })
   otp: string;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 }
